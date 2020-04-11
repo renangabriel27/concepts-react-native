@@ -56,7 +56,7 @@ export default function App() {
                     onPress={() => handleLikeRepository(repository.id)}
                     testID={`like-button-${repository.id}`}
                   >
-                    <Icon name="favorite" size={30} color="#CCC" />
+                    <Icon name="favorite" size={25} color="#CCC" />
                   </TouchableOpacity>
 
                   <Text
@@ -115,10 +115,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   repository: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
     marginTop: 5,
+    width: '85%',
   },
   description: {
     fontSize: 14,
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     color: "#ccc",
-    marginTop: 5,
+    marginTop: 3,
     marginRight: 5,
   },
 });
