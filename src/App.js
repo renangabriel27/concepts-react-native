@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
   SafeAreaView,
   View,
   FlatList,
   Text,
+  Linking,
   StatusBar,
   StyleSheet,
   TouchableOpacity,
@@ -43,32 +45,50 @@ export default function App() {
           keyExtractor={repository => repository.id}
           renderItem={({ item: repository }) => (
             <View style={styles.repositoryContainer}>
-              <Text style={styles.repository}>{repository.title}</Text>
-
-              <View style={styles.techsContainer}>
-                {repository.techs.map(tech => {
-                  <Text key={tech} style={styles.tech}>
-                    {tech}
-                  </Text>
-                })}
-              </View>
-
-              <View style={styles.likesContainer}>
-                <Text
-                  style={styles.likeText}
-                  testID={`repository-likes-${repository.id}`}
-                >
-                  {repository.likes} curtida{repository.likes > 1 ? 's' : ''}
+              <View style={styles.headerContainer}>
+                <Text style={styles.repository}>
+                  {repository.title}
                 </Text>
-              </View>
+
+                <View style={styles.likeContainer}>
+                  <TouchableOpacity
+                    activeOpacity={0.6}
+                    onPress={() => handleLikeRepository(repository.id)}
+                    testID={`like-button-${repository.id}`}
+                  >
+                    <Icon name="favorite" size={30} color="#CCC" />
+                  </TouchableOpacity>
+
+                  <Text
+                    style={styles.likeText}
+                    testID={`repository-likes-${repository.id}`}
+                  >
+                    {repository.likes}
+                  </Text>
+                </View>
+             </View>
+
+              <Text style={styles.description}>
+                {repository.description}
+              </Text>
 
               <TouchableOpacity
-                style={styles.button}
-                onPress={() => handleLikeRepository(repository.id)}
-                testID={`like-button-${repository.id}`}
-              >
-                <Text style={styles.buttonText}>Curtir</Text>
+                onPress={() => Linking.openURL(repository.url)}>
+                <Text style={styles.url}>
+                  {repository.url}
+                </Text>
               </TouchableOpacity>
+
+              <FlatList
+                style={styles.techsContainer}
+                data={repository.techs}
+                keyExtractor={tech => tech}
+                renderItem={({ item: tech }) => (
+                  <Text style={styles.tech}>
+                    {tech}
+                  </Text>
+                )}
+              />
             </View>
           )}
         />
@@ -80,50 +100,60 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#7159c1",
+    backgroundColor: "#A934F0",
   },
   repositoryContainer: {
-    marginBottom: 15,
+    marginTop: 10,
+    marginBottom: 10,
     marginHorizontal: 15,
     backgroundColor: "#fff",
     padding: 20,
+    borderRadius: 6,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   repository: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: "bold",
+    marginBottom: 10,
+    marginTop: 5,
+  },
+  description: {
+    fontSize: 14,
+    color: 'rgba(0, 0, 0, 0.5)',
+  },
+  url: {
+    marginTop: 20,
+    color: "#0085FF",
+    fontSize: 12,
   },
   techsContainer: {
     flexDirection: "row",
     marginTop: 10,
+    marginBottom: 10,
   },
   tech: {
-    fontSize: 12,
-    fontWeight: "bold",
-    marginRight: 10,
-    backgroundColor: "#04d361",
+    fontSize: 14,
+    fontWeight: "200",
+    marginTop: 10,
+    marginRight: 7,
     paddingHorizontal: 10,
-    paddingVertical: 5,
-    color: "#fff",
+    color: "#ff0000",
+    borderRadius: 10,
+    borderColor: '#ff0000',
+    borderWidth: 0.5,
   },
-  likesContainer: {
-    marginTop: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
+  likeContainer: {
+    marginTop: 10,
+    flexDirection: "row-reverse",
   },
   likeText: {
     fontSize: 14,
     fontWeight: "bold",
-    marginRight: 10,
-  },
-  button: {
-    marginTop: 10,
-  },
-  buttonText: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginRight: 10,
-    color: "#fff",
-    backgroundColor: "#7159c1",
-    padding: 15,
+    color: "#ccc",
+    marginTop: 5,
+    marginRight: 5,
   },
 });
